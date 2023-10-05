@@ -104,3 +104,5 @@
 - - pg_probackup_install
 - cron
 - netdata
+- run-sql
+- get-ip

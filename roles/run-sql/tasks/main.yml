@@ -1,0 +1,18 @@
+- name: Copy sql script for db setup
+  ansible.builtin.copy:
+    src: ./files/sql.sql
+    dest: /var/lib/postgresql/sql.sql
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: '0644'
+
+  tags: run-sql
+
+- name: Run queries from SQL script
+  postgresql_query:
+    db: weather
+    login_user: admin
+    login_password: admin
+    path_to_script: /var/lib/postgresql/sql.sql
+
+  tags: run-sql

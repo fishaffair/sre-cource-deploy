@@ -1,0 +1,5 @@
+PGIP: Haproxy_IP
+PGID: admin
+PGPASS: admin
+PGPORT: 5000
+DOTNET_ENVIRONMENT: Production

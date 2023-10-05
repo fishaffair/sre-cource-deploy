@@ -1,0 +1,10 @@
+- name: Get haproxy public IP
+  community.general.ipify_facts:
+    timeout: 30
+
+  tags: get-ip
+
+- debug:
+    msg: Public ip for haproxy - {{ ansible_facts['ipify_public_ip'] }}
+
+  tags: get-ip

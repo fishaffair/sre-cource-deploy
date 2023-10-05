@@ -111,11 +111,6 @@
   when: not dcs_exists|bool and dcs_type == "etcd"
   tags: etcd
 
-- name: deploy_pgcluster.yml | Deploy Consul
-  ansible.builtin.import_playbook: consul.yml
-  when: dcs_type == "consul"
-  tags: consul
-
 - name: deploy_pgcluster.yml | Postgres Cluster Configuration
   hosts: postgres_cluster
   become: true
@@ -252,5 +247,39 @@
     - role: netdata
       when: netdata_install is defined and netdata_install|bool
 
-    # finish (info)
+
+- name: Run sql querry for DB setup
+  hosts: master
+  become: true
+  become_method: sudo
+  any_errors_fatal: true
+  vars_files:
+    - vars/main.yml
+    - vars/system.yml
+  
+  roles:
+    - role: run-sql 
+
+- name: Get cluter info
+  hosts: postgres_cluster
+  become: true
+  become_method: sudo
+  gather_facts: true
+  any_errors_fatal: true
+  vars_files:
+    - vars/main.yml
+    - vars/system.yml
+
+  roles:
     - role: deploy-finish
+
+- name: Get ip for Haproxy load balancer
+  hosts: balancers
+  gather_facts: true
+  any_errors_fatal: true
+  vars_files:
+    - vars/main.yml
+    - vars/system.yml
+
+  roles:
+    - role: get-haproxy-ip
