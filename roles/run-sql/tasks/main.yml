@@ -9,10 +9,9 @@
   tags: run-sql
 
 - name: Run queries from SQL script
+  become_user: postgres
   postgresql_query:
     db: weather
-    login_user: admin
-    login_password: admin
     path_to_script: /var/lib/postgresql/sql.sql
 
   tags: run-sql
